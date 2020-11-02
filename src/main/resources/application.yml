@@ -1,0 +1,53 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: spring-boot-admin-server
+  boot:
+    admin:
+      client:
+        username: ${spring.security.user.name}
+        password: ${spring.security.user.password}
+        url: http://127.0.0.1:8082
+        instance:
+          metadata:
+            user.name: ${spring.security.user.name}
+            user.password: ${spring.security.user.password}
+            management.context-path: /actuator
+  security:
+    user:
+      name: client
+      password: client
+  cloud:
+    consul:
+      discovery:
+        instance-id: ${spring.application.name}:${spring.cloud.consul.host}
+        prefer-ip-address: true
+        tags: version=1.0
+        healthCheckPath: /actuator/health
+        healthCheckInterval: 10s
+        healthCheckTimeout: 60s
+        healthCheckCriticalTimeout: 5m
+      enabled: false
+      host: 127.0.0.1
+  output:
+    ansi:
+      enabled: always
+
+info:
+  tags:
+    environment: development
+  app:
+    name: '@pom.artifactId@'
+    description: '@pom.description@'
+    version: '@pom.version@'
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: '*'
